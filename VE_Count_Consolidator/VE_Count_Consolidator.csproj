@@ -1,8 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Hideki Saito</Authors>
+    <Company>Hideki Saito</Company>
+    <Product>Hideki Saito</Product>
+    <PackageId>VE_Count_Consolidator</PackageId>
+    <Description>Consolidates ARRL VE counts into one file</Description>
+    <Copyright>Copyright (c) 2017 Hideki Saito</Copyright>
+    <PackageLicenseUrl>https://github.com/hsaito/VE_Count_Consolidator/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/hsaito/VE_Count_Consolidator</PackageProjectUrl>
+    <Version>0.8.0.0</Version>
+    <AssemblyVersion>0.8.0.0</AssemblyVersion>
+    <FileVersion>0.8.0.0</FileVersion>
+    <RuntimeIdentifiers>linux-x64,linux-arm,win-x64,win-x86,osx-x64</RuntimeIdentifiers>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.8" />
+  </ItemGroup>
+ <ItemGroup>
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
