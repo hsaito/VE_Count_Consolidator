@@ -8,146 +8,96 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using log4net;
 
-public class Consolidator
+namespace VE_Count_Consolidator
 {
-    private static readonly ILog log = LogManager.GetLogger(typeof(Consolidator));
-
-    class Person
+    public class Consolidator
     {
-        public string name;
-        public string call;
-        public State state;
-        public int count;
-    }
+        private static readonly ILog log = LogManager.GetLogger(typeof(Consolidator));
 
-    List<Person> persons = new List<Person>();
-
-    class State
-    {
-        public string state_code;
-        public string state;
-    }
-
-    List<State> states = new List<State>();
-
-    string base_url;
-
-    public void Process()
-    {
-        try
+        public abstract class CountGetter
         {
-            LoadConfig();
-            Extract().Wait();
-            Output();
+            public abstract List<Person> Extract();
+            public abstract string vec { get; }
         }
-        catch (Exception ex)
-        {
-            log.Error(ex.Message);
-        }
-    }
 
-    private void Output()
-    {
-        try
+        public class Person
         {
-            log.Info("Writing output to output.tsv in a TSV (Tab Separated Value)");
-            var writer = new StreamWriter("output.tsv");
-            writer.AutoFlush = true;
-            writer.WriteLine("Call\tName\tState\tCount");
-            foreach (var item in persons)
+            public string name;
+            public string call;
+            public State state;
+            public int count;
+            public string vec;
+        }
+
+        public class State
+        {
+            public string state_code;
+            public string state;
+        }
+
+
+        List<State> states = new List<State>();
+
+        string base_url;
+
+        /// <summary>
+        /// Process extractions.
+        /// </summary>
+        public void Process()
+        {
+            try
             {
-                writer.WriteLine(item.call+"\t"+item.name+"\t"+item.state.state+"\t"+item.count.ToString());
+                List<CountGetter> count_getter_list = new List<CountGetter>();
+                count_getter_list.Add(new ARRL());
+                var persons = ProcessList(count_getter_list);
+                Output(persons);
             }
-            writer.Close();
-        }
-        catch (Exception ex)
-        {
-            log.Error(ex.Message);
-        }
-    }
-
-    private async Task Extract()
-    {
-        try
-        {
-            foreach (var state in states)
+            catch (Exception ex)
             {
-                var target = string.Format(base_url, state.state_code);
-                log.Info("Retrieving " + target);
-                var web = await GetWeb(target);
-                web = ExtractTable(web);
-
-                GetNameElement(web, state);
+                log.Error(ex.Message);
             }
         }
-        catch (Exception ex)
-        {
-            log.Error(ex.Message);
-        }
-    }
 
-    private void GetNameElement(string pagecontent, State state)
-    {
-        var content = XElement.Parse(pagecontent);
-        foreach (var entry in content.Elements("tr"))
+        /// <summary>
+        /// Extract from each of VEC
+        /// </summary>
+        /// <param name="list">List of class for getting counts</param>
+        /// <returns>List of person</returns>
+        private List<Person> ProcessList(List<CountGetter> list)
         {
-            var column = entry.Elements("td").ToList();
-            if (column.Count == 2)
+            List<Person> plist = new List<Person>();
+            foreach(var item in list)
             {
-                var data = new Person();
-                (data.call, data.name) = SeparateCallName(column[0].Value);
-                data.count = Convert.ToInt32(column[1].Value);
-                data.state = state;
-                persons.Add(data);
+                log.Info("Processing VEC: " + item.vec);
+                plist.AddRange(item.Extract());
+            }
+            return plist;
+        }
+
+
+        /// <summary>
+        /// Output person list to TSV
+        /// </summary>
+        /// <param name="persons">List of person</param>
+        private void Output(List<Person> persons)
+        {
+            try
+            {
+                log.Info("Writing output to output.tsv in a TSV (Tab Separated Value)");
+                var writer = new StreamWriter("output.tsv");
+                writer.AutoFlush = true;
+                writer.WriteLine("Call\tName\tState\tCount\tVEC");
+                foreach (var item in persons)
+                {
+                    writer.WriteLine(item.call + "\t" + item.name + "\t" + item.state.state + "\t" + item.count.ToString() + "\t" + item.vec);
+                }
+                writer.Close();
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
             }
         }
+
     }
-
-    private string ExtractTable(string input)
-    {
-        var matches = Regex.Matches(input, @"(<table(.*)/table>)", RegexOptions.Singleline | RegexOptions.Multiline);
-        return matches[0].Value;
-    }
-
-    void LoadConfig()
-    {
-        var reader = new StreamReader("config.xml");
-        var xl = XElement.Load(reader);
-        base_url = xl.Element("baseurl").Value;
-
-        foreach (var state in xl.Element("states").Elements("option"))
-        {
-            var entry = new State();
-            entry.state_code = state.Attribute("value").Value;
-            entry.state = state.Value;
-            states.Add(entry);
-        }
-    }
-
-    (string, string) SeparateCallName(string input)
-    {
-        var entry = Regex.Split(input.Trim(), @"(.*)\((.*?)\)");
-        return (entry[1].Trim(), entry[2].Trim());
-    }
-
-    /// <summary>
-    /// Retrieve content from the web.
-    /// </summary>
-    /// <param name="location">URL of the website</param>
-    /// <returns>String of the website</returns>
-    public static async Task<string> GetWeb(string location)
-    {
-        // Make a request
-        var request = WebRequest.Create(location);
-
-        // Get the response
-        var response = await request.GetResponseAsync();
-        // Get the stream
-        var stream = response.GetResponseStream();
-        // Read the stream
-        StreamReader reader = new StreamReader(stream);
-        string data = await reader.ReadToEndAsync();
-        return data;
-    }
-
 }
