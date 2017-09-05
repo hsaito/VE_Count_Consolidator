@@ -7,7 +7,7 @@ namespace VE_Count_Consolidator
     public static class Utils
     {
         /// <summary>
-        /// Retrieve content from the web.
+        ///     Retrieve content from the web.
         /// </summary>
         /// <param name="location">URL of the website</param>
         /// <returns>String of the website</returns>

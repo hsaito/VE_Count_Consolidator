@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using log4net;
-using System.Xml.Linq;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using log4net;
 
 namespace VE_Count_Consolidator
 {
@@ -18,7 +18,7 @@ namespace VE_Count_Consolidator
         public override string Vec => "ARRL";
 
         /// <summary>
-        /// Extract the list of VE from the ARRL list
+        ///     Extract the list of VE from the ARRL list
         /// </summary>
         /// <returns>List of person</returns>
         public override IEnumerable<Consolidator.Person> Extract()
@@ -46,7 +46,7 @@ namespace VE_Count_Consolidator
         }
 
         /// <summary>
-        /// Process the page contents and fill the list of person
+        ///     Process the page contents and fill the list of person
         /// </summary>
         /// <param name="pagecontent">Content of the table segment</param>
         /// <param name="state">List of the state</param>
@@ -71,7 +71,7 @@ namespace VE_Count_Consolidator
         }
 
         /// <summary>
-        /// Load the config file
+        ///     Load the config file
         /// </summary>
         private void LoadConfig()
         {
@@ -92,18 +92,19 @@ namespace VE_Count_Consolidator
         }
 
         /// <summary>
-        /// Extract the table element from ARRL page
+        ///     Extract the table element from ARRL page
         /// </summary>
         /// <param name="input">String of the page</param>
         /// <returns>Table segment from the page</returns>
         private static string ExtractTable(string input)
         {
-            var matches = Regex.Matches(input, @"(<table(.*)/table>)", RegexOptions.Singleline | RegexOptions.Multiline);
+            var matches = Regex.Matches(input, @"(<table(.*)/table>)",
+                RegexOptions.Singleline | RegexOptions.Multiline);
             return matches[0].Value;
         }
 
         /// <summary>
-        /// Separate callsign and name from "Call (Name)" format.
+        ///     Separate callsign and name from "Call (Name)" format.
         /// </summary>
         /// <param name="input">String of the "Call (Name)"</param>
         /// <returns>Tuple of the call and name</returns>

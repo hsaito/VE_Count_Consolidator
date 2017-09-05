@@ -4,12 +4,14 @@ using System.Reflection;
 using System.Xml;
 using log4net;
 using log4net.Config;
+using log4net.Repository.Hierarchy;
 
 namespace VE_Count_Consolidator
 {
     internal class Program
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
+
         // ReSharper disable once UnusedParameter.Global
         public static int Main(string[] args)
         {
@@ -18,7 +20,7 @@ namespace VE_Count_Consolidator
             {
                 Consolidator.Process();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Fatal(ex.Message);
                 return -1;
@@ -27,7 +29,7 @@ namespace VE_Count_Consolidator
         }
 
         /// <summary>
-        /// Initialize logging
+        ///     Initialize logging
         /// </summary>
         private static bool InitializeLogging()
         {
@@ -41,7 +43,7 @@ namespace VE_Count_Consolidator
                     log4NetConfig.Load(reader);
                 }
 
-                var rep = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
+                var rep = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(Hierarchy));
                 XmlConfigurator.Configure(rep, log4NetConfig["log4net"]);
                 return true;
             }

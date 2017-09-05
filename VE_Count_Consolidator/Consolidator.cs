@@ -9,29 +9,8 @@ namespace VE_Count_Consolidator
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Consolidator));
 
-        public abstract class CountGetter
-        {
-            public abstract IEnumerable<Person> Extract();
-            public abstract string Vec { get; }
-        }
-
-        public class Person
-        {
-            public string Name;
-            public string Call;
-            public State State;
-            public int Count;
-            public string Vec;
-        }
-
-        public class State
-        {
-            public string StateCode;
-            public string StateName;
-        }
-
         /// <summary>
-        /// Process extractions.
+        ///     Process extractions.
         /// </summary>
         public static void Process()
         {
@@ -48,14 +27,14 @@ namespace VE_Count_Consolidator
         }
 
         /// <summary>
-        /// Extract from each of VEC
+        ///     Extract from each of VEC
         /// </summary>
         /// <param name="list">List of class for getting counts</param>
         /// <returns>List of person</returns>
         private static IEnumerable<Person> ProcessList(IEnumerable<CountGetter> list)
         {
             var plist = new List<Person>();
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 Log.Info("Processing VEC: " + item.Vec);
                 plist.AddRange(item.Extract());
@@ -64,7 +43,7 @@ namespace VE_Count_Consolidator
         }
 
         /// <summary>
-        /// Output person list to TSV
+        ///     Output person list to TSV
         /// </summary>
         /// <param name="persons">List of person</param>
         private static void Output(IEnumerable<Person> persons)
@@ -77,9 +56,8 @@ namespace VE_Count_Consolidator
                     writer.AutoFlush = true;
                     writer.WriteLine("Call\tName\tState\tCount\tVEC");
                     foreach (var item in persons)
-                    {
-                        writer.WriteLine(item.Call + "\t" + item.Name + "\t" + item.State.StateName + "\t" + item.Count + "\t" + item.Vec);
-                    }
+                        writer.WriteLine(item.Call + "\t" + item.Name + "\t" + item.State.StateName + "\t" +
+                                         item.Count + "\t" + item.Vec);
                     writer.Close();
                 }
             }
@@ -89,5 +67,25 @@ namespace VE_Count_Consolidator
             }
         }
 
+        public abstract class CountGetter
+        {
+            public abstract string Vec { get; }
+            public abstract IEnumerable<Person> Extract();
+        }
+
+        public class Person
+        {
+            public string Call;
+            public int Count;
+            public string Name;
+            public State State;
+            public string Vec;
+        }
+
+        public class State
+        {
+            public string StateCode;
+            public string StateName;
+        }
     }
 }
