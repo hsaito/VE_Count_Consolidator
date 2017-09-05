@@ -1,12 +1,6 @@
-using System;
 using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Threading.Tasks;
-using System.Xml;
-using log4net;
-using log4net.Config;
-using log4net.Repository;
 
 namespace VE_Count_Consolidator
 {
@@ -27,8 +21,8 @@ namespace VE_Count_Consolidator
             // Get the stream
             var stream = response.GetResponseStream();
             // Read the stream
-            StreamReader reader = new StreamReader(stream);
-            string data = await reader.ReadToEndAsync();
+            var reader = new StreamReader(stream);
+            var data = await reader.ReadToEndAsync();
             return data;
         }
     }

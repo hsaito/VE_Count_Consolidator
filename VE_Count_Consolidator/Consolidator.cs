@@ -1,60 +1,49 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using log4net;
 
 namespace VE_Count_Consolidator
 {
     public class Consolidator
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(Consolidator));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Consolidator));
 
         public abstract class CountGetter
         {
-            public abstract List<Person> Extract();
-            public abstract string vec { get; }
+            public abstract IEnumerable<Person> Extract();
+            public abstract string Vec { get; }
         }
 
         public class Person
         {
-            public string name;
-            public string call;
-            public State state;
-            public int count;
-            public string vec;
+            public string Name;
+            public string Call;
+            public State State;
+            public int Count;
+            public string Vec;
         }
 
         public class State
         {
-            public string state_code;
-            public string state;
+            public string StateCode;
+            public string StateName;
         }
-
-
-        List<State> states = new List<State>();
-
-        string base_url;
 
         /// <summary>
         /// Process extractions.
         /// </summary>
-        public void Process()
+        public static void Process()
         {
             try
             {
-                List<CountGetter> count_getter_list = new List<CountGetter>();
-                count_getter_list.Add(new ARRL());
-                var persons = ProcessList(count_getter_list);
+                var countGetterList = new List<CountGetter> {new ARRL()};
+                var persons = ProcessList(countGetterList);
                 Output(persons);
             }
             catch (Exception ex)
             {
-                log.Error(ex.Message);
+                Log.Error(ex.Message);
             }
         }
 
@@ -63,39 +52,40 @@ namespace VE_Count_Consolidator
         /// </summary>
         /// <param name="list">List of class for getting counts</param>
         /// <returns>List of person</returns>
-        private List<Person> ProcessList(List<CountGetter> list)
+        private static IEnumerable<Person> ProcessList(IEnumerable<CountGetter> list)
         {
-            List<Person> plist = new List<Person>();
+            var plist = new List<Person>();
             foreach(var item in list)
             {
-                log.Info("Processing VEC: " + item.vec);
+                Log.Info("Processing VEC: " + item.Vec);
                 plist.AddRange(item.Extract());
             }
             return plist;
         }
 
-
         /// <summary>
         /// Output person list to TSV
         /// </summary>
         /// <param name="persons">List of person</param>
-        private void Output(List<Person> persons)
+        private static void Output(IEnumerable<Person> persons)
         {
             try
             {
-                log.Info("Writing output to output.tsv in a TSV (Tab Separated Value)");
-                var writer = new StreamWriter("output.tsv");
-                writer.AutoFlush = true;
-                writer.WriteLine("Call\tName\tState\tCount\tVEC");
-                foreach (var item in persons)
+                Log.Info("Writing output to output.tsv in a TSV (Tab Separated Value)");
+                using (var writer = new StreamWriter("output.tsv"))
                 {
-                    writer.WriteLine(item.call + "\t" + item.name + "\t" + item.state.state + "\t" + item.count.ToString() + "\t" + item.vec);
+                    writer.AutoFlush = true;
+                    writer.WriteLine("Call\tName\tState\tCount\tVEC");
+                    foreach (var item in persons)
+                    {
+                        writer.WriteLine(item.Call + "\t" + item.Name + "\t" + item.State.StateName + "\t" + item.Count + "\t" + item.Vec);
+                    }
+                    writer.Close();
                 }
-                writer.Close();
             }
             catch (Exception ex)
             {
-                log.Error(ex.Message);
+                Log.Error(ex.Message);
             }
         }
 
