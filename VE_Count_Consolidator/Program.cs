@@ -4,49 +4,47 @@ using System.Reflection;
 using System.Xml;
 using log4net;
 using log4net.Config;
-using log4net.Repository;
+using log4net.Repository.Hierarchy;
 
 namespace VE_Count_Consolidator
 {
-    class Program
+    internal class Program
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(Program));
-        static int Main(string[] args)
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
+
+        // ReSharper disable once UnusedParameter.Global
+        public static int Main(string[] args)
         {
-           if(InitializeLogging())
-           {
-               try
-               {
-                   var consolidator = new Consolidator();
-                   consolidator.Process();
-               }
-               catch(Exception ex)
-               {
-                   log.Fatal(ex.Message);
-                   return -1;
-               }
-               return 0;
-           }
-           return -1;
+            if (!InitializeLogging()) return -1;
+            try
+            {
+                Consolidator.Process();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message);
+                return -1;
+            }
+            return 0;
         }
 
         /// <summary>
-        /// Initialize logging
+        ///     Initialize logging
         /// </summary>
-        static bool InitializeLogging()
+        private static bool InitializeLogging()
         {
             try
             {
                 // Configuration for logging
-                XmlDocument log4netConfig = new XmlDocument();
+                var log4NetConfig = new XmlDocument();
 
-                using (StreamReader reader = new StreamReader(new FileStream("log4net.config", FileMode.Open, FileAccess.Read)))
+                using (var reader = new StreamReader(new FileStream("log4net.config", FileMode.Open, FileAccess.Read)))
                 {
-                    log4netConfig.Load(reader);
+                    log4NetConfig.Load(reader);
                 }
 
-                ILoggerRepository rep = log4net.LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
-                XmlConfigurator.Configure(rep, log4netConfig["log4net"]);
+                var rep = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(Hierarchy));
+                XmlConfigurator.Configure(rep, log4NetConfig["log4net"]);
                 return true;
             }
             catch (Exception ex)
