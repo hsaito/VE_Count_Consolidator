@@ -9,19 +9,19 @@ using log4net;
 namespace VE_Count_Consolidator
 {
     // ReSharper disable once InconsistentNaming
-    internal class ARRL : Consolidator.CountGetter
+    internal class ARRL : Consolidator.ICountGetter
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ARRL));
 
         private readonly List<Consolidator.State> _states = new List<Consolidator.State>();
         private string _baseUrl;
-        public override string Vec => "ARRL";
+        public string Vec => "ARRL";
 
         /// <summary>
         ///     Extract the list of VE from the ARRL list
         /// </summary>
         /// <returns>List of person</returns>
-        public override IEnumerable<Consolidator.Person> Extract()
+        public IEnumerable<Consolidator.Person> Extract()
         {
             var list = new List<Consolidator.Person>();
             try

@@ -16,7 +16,7 @@ namespace VE_Count_Consolidator
         {
             try
             {
-                var countGetterList = new List<CountGetter> {new ARRL()};
+                var countGetterList = new List<ICountGetter> {new ARRL()};
                 var persons = ProcessList(countGetterList);
                 Output(persons);
             }
@@ -31,7 +31,7 @@ namespace VE_Count_Consolidator
         /// </summary>
         /// <param name="list">List of class for getting counts</param>
         /// <returns>List of person</returns>
-        private static IEnumerable<Person> ProcessList(IEnumerable<CountGetter> list)
+        private static IEnumerable<Person> ProcessList(IEnumerable<ICountGetter> list)
         {
             var plist = new List<Person>();
             foreach (var item in list)
@@ -67,10 +67,10 @@ namespace VE_Count_Consolidator
             }
         }
 
-        public abstract class CountGetter
+        public interface ICountGetter
         {
-            public abstract string Vec { get; }
-            public abstract IEnumerable<Person> Extract();
+            string Vec { get; }
+            IEnumerable<Person> Extract();
         }
 
         public class Person
