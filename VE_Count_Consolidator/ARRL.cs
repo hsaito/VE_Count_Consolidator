@@ -42,6 +42,7 @@ namespace VE_Count_Consolidator
                 Log.Error(ex.Message);
                 return null;
             }
+
             return list;
         }
 

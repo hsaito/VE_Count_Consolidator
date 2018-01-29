@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace VE_Count_Consolidator
             // Get the stream
             var stream = response.GetResponseStream();
             // Read the stream
-            var reader = new StreamReader(stream);
+            var reader = new StreamReader(stream ?? throw new NullReferenceException("Stream returned null."));
             var data = await reader.ReadToEndAsync();
             return data;
         }

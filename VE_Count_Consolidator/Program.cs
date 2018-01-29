@@ -24,6 +24,7 @@ namespace VE_Count_Consolidator
                 Log.Fatal(ex.Message);
                 return -1;
             }
+
             return 0;
         }
 

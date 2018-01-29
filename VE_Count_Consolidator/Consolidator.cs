@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using CsvHelper;
 using log4net;
 
 namespace VE_Count_Consolidator
@@ -39,25 +41,36 @@ namespace VE_Count_Consolidator
                 Log.Info("Processing VEC: " + item.Vec);
                 plist.AddRange(item.Extract());
             }
+
             return plist;
         }
 
         /// <summary>
-        ///     Output person list to TSV
+        ///     Output person list to CSV
         /// </summary>
         /// <param name="persons">List of person</param>
         private static void Output(IEnumerable<Person> persons)
         {
             try
             {
-                Log.Info("Writing output to output.tsv in a TSV (Tab Separated Value)");
-                using (var writer = new StreamWriter("output.tsv"))
+                Log.Info("Writing output to output.csv in a CSV");
+                using (var writer = new StreamWriter("output.csv"))
                 {
                     writer.AutoFlush = true;
-                    writer.WriteLine("Call\tName\tState\tCount\tVEC");
-                    foreach (var item in persons)
-                        writer.WriteLine(item.Call + "\t" + item.Name + "\t" + item.State.StateName + "\t" +
-                                         item.Count + "\t" + item.Vec);
+
+                    var entryList = persons.Select(item => new VeCountEntry
+                        {
+                            Call = item.Call,
+                            Name = item.Name,
+                            State = item.State.StateName,
+                            Count = item.Count,
+                            Vec = item.Vec
+                        })
+                        .ToList();
+
+                    var csvWriter = new CsvWriter(writer);
+                    csvWriter.Configuration.RegisterClassMap<VeCountMapping>();
+                    csvWriter.WriteRecords(entryList);
                     writer.Close();
                 }
             }
