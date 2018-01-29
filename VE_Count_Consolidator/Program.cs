@@ -12,8 +12,7 @@ namespace VE_Count_Consolidator
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
 
-        // ReSharper disable once UnusedParameter.Global
-        public static int Main(string[] args)
+        public static int Main()
         {
             if (!InitializeLogging()) return -1;
             try
@@ -25,6 +24,7 @@ namespace VE_Count_Consolidator
                 Log.Fatal(ex.Message);
                 return -1;
             }
+
             return 0;
         }
 
