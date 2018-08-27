@@ -76,17 +76,18 @@ namespace VE_Count_Consolidator
         /// </summary>
         private void LoadConfig()
         {
-            var reader = new StreamReader("ARRL.xml");
-            var xl = XElement.Load(reader);
-            _baseUrl = xl.Element("baseurl")?.Value;
+            _baseUrl = "http://www.arrl.org/ve-session-counts?state={0}";
+            var web = Utils.GetWeb("http://www.arrl.org/ve-session-counts").Result;
 
-            // ReSharper disable once PossibleNullReferenceException
-            foreach (var state in xl.Element("states")?.Elements("option"))
+            var matches = Regex.Matches(web, @"<option value='(.*?)'>(.*?)</option>");
+            
+            foreach (var match in matches.Select(x => x))
             {
+                if (match.Groups[1].Value == "") continue;
                 var entry = new Consolidator.State
                 {
-                    StateCode = state.Attribute("value")?.Value,
-                    StateName = state.Value
+                    StateCode = match.Groups[1].Value,
+                    StateName = match.Groups[2].Value
                 };
                 _states.Add(entry);
             }
