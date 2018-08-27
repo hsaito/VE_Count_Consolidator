@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -80,7 +79,7 @@ namespace VE_Count_Consolidator
             var web = Utils.GetWeb("http://www.arrl.org/ve-session-counts").Result;
 
             var matches = Regex.Matches(web, @"<option value='(.*?)'>(.*?)</option>");
-            
+
             foreach (var match in matches.Select(x => x))
             {
                 if (match.Groups[1].Value == "") continue;

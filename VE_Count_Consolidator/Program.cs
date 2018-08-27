@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using CommandLine;
 using log4net;
 using log4net.Config;
 using log4net.Repository.Hierarchy;
@@ -12,12 +14,14 @@ namespace VE_Count_Consolidator
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
 
-        public static int Main()
+
+        public static int Main(string[] args)
         {
             if (!InitializeLogging()) return -1;
             try
             {
-                Consolidator.Process();
+                Parser.Default.ParseArguments<Options>(args).WithParsed(
+                    RunProcess);
             }
             catch (Exception ex)
             {
@@ -27,6 +31,13 @@ namespace VE_Count_Consolidator
 
             return 0;
         }
+
+        private static void RunProcess(Options options)
+        {
+            if (options.Mode != "create") return;
+            Consolidator.Process();
+        }
+
 
         /// <summary>
         ///     Initialize logging
@@ -53,6 +64,14 @@ namespace VE_Count_Consolidator
                 Console.WriteLine(ex.Message);
                 return false;
             }
+        }
+
+        [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+        private class Options
+        {
+            [Option('m', "mode", Required = true, HelpText = "Mode of operations.")]
+            public string Mode { get; set; }
         }
     }
 }
