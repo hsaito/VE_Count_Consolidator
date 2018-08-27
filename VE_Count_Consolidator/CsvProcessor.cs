@@ -1,5 +1,7 @@
 ﻿using CsvHelper.Configuration;
 
+// ReSharper disable ClassNeverInstantiated.Global
+
 namespace VE_Count_Consolidator
 {
     public class VeCountEntry

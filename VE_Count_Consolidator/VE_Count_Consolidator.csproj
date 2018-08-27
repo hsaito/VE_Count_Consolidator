@@ -1,30 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Authors>Hideki Saito</Authors>
-    <Company>Hideki Saito</Company>
-    <Product>Hideki Saito</Product>
-    <PackageId>VE_Count_Consolidator</PackageId>
-    <Description>Consolidates ARRL VE counts into one file</Description>
-    <Copyright>Copyright (c) 2018 Hideki Saito</Copyright>
-    <PackageLicenseUrl>https://github.com/hsaito/VE_Count_Consolidator/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/hsaito/VE_Count_Consolidator</PackageProjectUrl>
-    <Version>1.3.0.0</Version>
-    <AssemblyVersion>1.3.0.0</AssemblyVersion>
-    <FileVersion>1.3.0.0</FileVersion>
-    <RuntimeIdentifiers>linux-x64,linux-arm,win-x64,win-x86,osx-x64</RuntimeIdentifiers>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="6.1.1" />
-    <PackageReference Include="log4net" Version="2.0.8" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ARRL.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.0</TargetFramework>
+        <Title>VE Count Consolidator</Title>
+        <Authors>Hideki Saito</Authors>
+        <Company>Hideki Saito</Company>
+        <Product>Hideki Saito</Product>
+        <PackageId>VE_Count_Consolidator</PackageId>
+        <Description>Consolidates ARRL VE counts into one file</Description>
+        <Copyright>Copyright (c) 2018 Hideki Saito</Copyright>
+        <PackageLicenseUrl>https://github.com/hsaito/VE_Count_Consolidator/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/hsaito/VE_Count_Consolidator</PackageProjectUrl>
+        <Version>1.4.0.0</Version>
+        <AssemblyVersion>1.4.0.0</AssemblyVersion>
+        <FileVersion>1.4.0.0</FileVersion>
+        <RuntimeIdentifiers>linux-x64,linux-arm,win-x64,win-x86,osx-x64</RuntimeIdentifiers>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.3.0"/>
+        <PackageReference Include="CsvHelper" Version="7.1.1"/>
+        <PackageReference Include="log4net" Version="2.0.8"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="log4net.config">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 </Project>
