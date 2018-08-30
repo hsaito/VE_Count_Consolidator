@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp2.0</TargetFramework>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
         <Title>VE Count Consolidator</Title>
         <Authors>Hideki Saito</Authors>
         <Company>Hideki Saito</Company>
@@ -17,9 +17,9 @@
         <RuntimeIdentifiers>linux-x64,linux-arm,win-x64,win-x86,osx-x64</RuntimeIdentifiers>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="CommandLineParser" Version="2.3.0"/>
-        <PackageReference Include="CsvHelper" Version="7.1.1"/>
-        <PackageReference Include="log4net" Version="2.0.8"/>
+        <PackageReference Include="CommandLineParser" Version="2.3.0" />
+        <PackageReference Include="CsvHelper" Version="7.1.1" />
+        <PackageReference Include="log4net" Version="2.0.8" />
     </ItemGroup>
     <ItemGroup>
         <None Update="log4net.config">
