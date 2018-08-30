@@ -70,7 +70,7 @@ namespace VE_Count_Consolidator
         [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         private class Options
         {
-            [Option('m', "mode", Required = true, HelpText = "Mode of operations.")]
+            [Option('m', "mode", Required = true, HelpText = "Mode of operations. (Currently supported: create)")]
             public string Mode { get; set; }
         }
     }
