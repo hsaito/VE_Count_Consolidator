@@ -2,7 +2,7 @@
 
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace VE_Count_Consolidator
+namespace VECountConsolidatorCli
 {
     public class VeCountEntry
     {

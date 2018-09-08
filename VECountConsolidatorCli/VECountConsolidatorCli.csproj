@@ -11,10 +11,11 @@
         <Copyright>Copyright (c) 2018 Hideki Saito</Copyright>
         <PackageLicenseUrl>https://github.com/hsaito/VE_Count_Consolidator/blob/master/LICENSE</PackageLicenseUrl>
         <PackageProjectUrl>https://github.com/hsaito/VE_Count_Consolidator</PackageProjectUrl>
-        <Version>1.4.0.0</Version>
-        <AssemblyVersion>1.4.0.0</AssemblyVersion>
-        <FileVersion>1.4.0.0</FileVersion>
+        <Version>1.5.0.0</Version>
+        <AssemblyVersion>1.5.0.0</AssemblyVersion>
+        <FileVersion>1.5.0.0</FileVersion>
         <RuntimeIdentifiers>linux-x64,linux-arm,win-x64,win-x86,osx-x64</RuntimeIdentifiers>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.3.0" />
@@ -25,5 +26,8 @@
         <None Update="log4net.config">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\VECountConsolidator\VECountConsolidator.csproj" />
     </ItemGroup>
 </Project>

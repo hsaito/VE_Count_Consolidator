@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Xml;
 using CommandLine;
+using CsvHelper;
 using log4net;
 using log4net.Config;
 using log4net.Repository.Hierarchy;
+using VECountConsolidator;
 
-namespace VE_Count_Consolidator
+namespace VECountConsolidatorCli
 {
     internal class Program
     {
@@ -21,7 +25,7 @@ namespace VE_Count_Consolidator
             try
             {
                 Parser.Default.ParseArguments<Options>(args).WithParsed(
-                    RunProcess);
+                    Generate);
             }
             catch (Exception ex)
             {
@@ -32,12 +36,52 @@ namespace VE_Count_Consolidator
             return 0;
         }
 
-        private static void RunProcess(Options options)
+        private static void Generate(Options options)
         {
             if (options.Mode != "create") return;
-            Consolidator.Process();
+            RunProcess();
         }
 
+        private static void RunProcess()
+        {
+            var output = Consolidator.Process();
+            Output(output);
+        }
+
+
+        /// <summary>
+        ///     Output person list to CSV
+        /// </summary>
+        /// <param name="persons">List of person</param>
+        private static void Output(IEnumerable<Consolidator.Person> persons)
+        {
+            try
+            {
+                using (var writer = new StreamWriter("output.csv"))
+                {
+                    writer.AutoFlush = true;
+
+                    var entryList = persons.Select(item => new VeCountEntry
+                        {
+                            Call = item.Call,
+                            Name = item.Name,
+                            State = item.State.StateName,
+                            Count = item.Count,
+                            Vec = item.Vec
+                        })
+                        .ToList();
+
+                    var csvWriter = new CsvWriter(writer);
+                    csvWriter.Configuration.RegisterClassMap<VeCountMapping>();
+                    csvWriter.WriteRecords(entryList);
+                    writer.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+            }
+        }
 
         /// <summary>
         ///     Initialize logging
