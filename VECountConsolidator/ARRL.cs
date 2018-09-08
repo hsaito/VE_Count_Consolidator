@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using log4net;
 
-namespace VE_Count_Consolidator
+namespace VECountConsolidator
 {
     // ReSharper disable once InconsistentNaming
     internal class ARRL : Consolidator.ICountGetter
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(ARRL));
-
         private readonly List<Consolidator.State> _states = new List<Consolidator.State>();
         private string _baseUrl;
         public string Vec => "ARRL";
@@ -23,23 +20,15 @@ namespace VE_Count_Consolidator
         public IEnumerable<Consolidator.Person> Extract()
         {
             var list = new List<Consolidator.Person>();
-            try
-            {
-                LoadConfig();
-                foreach (var state in _states)
-                {
-                    var target = string.Format(_baseUrl, state.StateCode);
-                    Log.Info("Retrieving " + target);
-                    var web = Utils.GetWeb(target).Result;
-                    web = ExtractTable(web);
 
-                    list.AddRange(GetNameElement(web, state));
-                }
-            }
-            catch (Exception ex)
+            LoadConfig();
+            foreach (var state in _states)
             {
-                Log.Error(ex.Message);
-                return null;
+                var target = string.Format(_baseUrl, state.StateCode);
+                var web = Utils.GetWeb(target).Result;
+                web = ExtractTable(web);
+
+                list.AddRange(GetNameElement(web, state));
             }
 
             return list;
@@ -80,7 +69,7 @@ namespace VE_Count_Consolidator
 
             var matches = Regex.Matches(web, @"<option value='(.*?)'>(.*?)</option>");
 
-            foreach (var match in matches.Select(x => x))
+            foreach (Match match in matches)
             {
                 if (match.Groups[1].Value == "") continue;
                 var entry = new Consolidator.State

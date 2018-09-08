@@ -3,9 +3,9 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace VE_Count_Consolidator
+namespace VECountConsolidator
 {
-    public static class Utils
+    internal static class Utils
     {
         /// <summary>
         ///     Retrieve content from the web.
