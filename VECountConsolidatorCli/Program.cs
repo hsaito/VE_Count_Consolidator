@@ -44,7 +44,7 @@ namespace VECountConsolidatorCli
 
         private static void RunProcess()
         {
-            var output = Consolidator.Process();
+            var output = Consolidator.Process(Consolidator.VEC.ARRL);
             Output(output);
         }
 

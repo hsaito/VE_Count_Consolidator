@@ -1,17 +1,53 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VECountConsolidator
 {
     public class Consolidator
     {
+        public enum VEC
+        {
+            ARRL
+        }
+
         /// <summary>
         ///     Process extractions.
         /// </summary>
-        public static IEnumerable<Person> Process()
+        /// <param name="vec">Name of VEC</param>
+        /// <returns>List of VEs</returns>
+        public static IEnumerable<Person> Process(VEC vec)
         {
-            var countGetterList = new List<ICountGetter> {new ARRL()};
-            var persons = ProcessList(countGetterList);
-            return persons;
+            switch (vec)
+            {
+                case VEC.ARRL:
+                {
+                    var countGetterList = new List<ICountGetter> {new ARRL()};
+                    var persons = ProcessList(countGetterList);
+                    return persons;
+                }
+
+                default:
+                {
+                    throw new VECountConsolidatorException();
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Process extractions (for multiple VECs)
+        /// </summary>
+        /// <param name="vecs">List of VECs</param>
+        /// <returns>List of VEs</returns>
+        public static IEnumerable<Person> Process(IEnumerable<VEC> vecs)
+        {
+            var list = new List<Person>();
+            foreach (var vecItem in vecs)
+            {
+                var resultList = Process(vecItem);
+                list.AddRange(resultList.ToList());
+            }
+
+            return list;
         }
 
         /// <summary>
