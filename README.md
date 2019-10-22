@@ -12,6 +12,8 @@ This repository contains two components:
 - VECountConsolidatorCli -- CLI frontend that uses the library above.
 
 ### VECountConsolidator
+This library is available from [NuGet](https://www.nuget.org/packages/VECountConsolidator/).
+
 Library handling the process. Caller should call Process() function with appropriate `enum` currently only supports `VEC.ARRL`.
 
 Return the list of the following format.
