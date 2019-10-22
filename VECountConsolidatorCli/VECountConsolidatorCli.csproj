@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
         <Title>VE Count Consolidator</Title>
         <Authors>Hideki Saito</Authors>
         <Company>Hideki Saito</Company>
@@ -11,21 +11,16 @@
         <Copyright>Copyright (c) 2018 Hideki Saito</Copyright>
         <PackageLicenseUrl>https://github.com/hsaito/VE_Count_Consolidator/blob/master/LICENSE</PackageLicenseUrl>
         <PackageProjectUrl>https://github.com/hsaito/VE_Count_Consolidator</PackageProjectUrl>
-        <Version>1.5.0.0</Version>
-        <AssemblyVersion>1.5.0.0</AssemblyVersion>
-        <FileVersion>1.5.0.0</FileVersion>
-        <RuntimeIdentifiers>linux-x64,linux-arm,win-x64,win-x86,osx-x64</RuntimeIdentifiers>
+        <Version>1.5.1.0</Version>
+        <AssemblyVersion>1.5.1.0</AssemblyVersion>
+        <FileVersion>1.5.1.0</FileVersion>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.6.0" />
         <PackageReference Include="CsvHelper" Version="12.1.2" />
-        <PackageReference Include="log4net" Version="2.0.8" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Update="log4net.config">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\VECountConsolidator\VECountConsolidator.csproj" />
