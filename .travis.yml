@@ -1,8 +1,0 @@
-language: csharp
-solution: VE_Count_Consolidator.sln
-mono: none
-dotnet: 3.0.100
-script:
- - dotnet restore
- - dotnet build
-
