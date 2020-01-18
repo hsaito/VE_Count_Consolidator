@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using CommandLine;
@@ -63,7 +64,7 @@ namespace VECountConsolidatorCli
                         })
                         .ToList();
 
-                    var csvWriter = new CsvWriter(writer);
+                    var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
                     csvWriter.Configuration.RegisterClassMap<VeCountMapping>();
                     csvWriter.WriteRecords(entryList);
                     writer.Close();
