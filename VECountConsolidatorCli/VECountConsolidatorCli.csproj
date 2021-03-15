@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <Title>VE Count Consolidator</Title>
         <Authors>Hideki Saito</Authors>
         <Company>Hideki Saito</Company>
@@ -18,7 +18,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.8.0" />
-        <PackageReference Include="CsvHelper" Version="16.0.0" />
+        <PackageReference Include="CsvHelper" Version="26.0.1" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\VECountConsolidator\VECountConsolidator.csproj" />

@@ -65,7 +65,7 @@ namespace VECountConsolidatorCli
                         .ToList();
 
                     var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
-                    csvWriter.Configuration.RegisterClassMap<VeCountMapping>();
+                    csvWriter.Context.RegisterClassMap<VeCountMapping>();
                     csvWriter.WriteRecords(entryList);
                     writer.Close();
                 }
