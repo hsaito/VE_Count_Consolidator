@@ -9,7 +9,7 @@ WORKDIR /source
 RUN dotnet test
 RUN dotnet publish -c Release -o /app
 
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+FROM mcr.microsoft.com/dotnet/core/runtime:latest
 WORKDIR /app
 COPY --from=build /app .
 ENTRYPOINT ["dotnet", "VECountConsolidatorCli.dll", "-m", "create"]
