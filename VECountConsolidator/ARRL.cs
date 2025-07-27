@@ -7,7 +7,7 @@ using System.Xml.Linq;
 namespace VECountConsolidator
 {
     // ReSharper disable once InconsistentNaming
-    internal class ARRL : Consolidator.ICountGetter
+    public class ARRL : Consolidator.ICountGetter
     {
         private readonly List<Consolidator.State> _states = new List<Consolidator.State>();
         private string _baseUrl;
