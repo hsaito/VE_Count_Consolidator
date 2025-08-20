@@ -1,22 +1,71 @@
 # VE Count Consolidator
 
-## Supported VECs
-- [ARRL](http://www.arrl.org/)
+## Overview
+VE Count Consolidator is a C# library and CLI tool for aggregating and processing activity data of Volunteer Examiners (VE) for US amateur radio license exams.
 
-The library can be expanded by implementing additional class derived from `VECountConsolidator.Consolidator` class. 
+## Project Structure
+- **VECountConsolidator/**: Library for data retrieval and aggregation (NuGet compatible)
+- **VECountConsolidatorCli/**: Command-line tool utilizing the library
+- **VECountConsolidator.Tests/**: Unit tests for the library and CLI (xUnit)
 
-## Components
-This repository contains two components:
+## Unit Testing
+Unit tests are provided in the `VECountConsolidator.Tests` directory, using the xUnit framework. These tests cover:
+- ARRL data extraction
+- Consolidator logic and error handling
 
-- VECountConsolidator -- Library that handles fetching and processing of the data.
-- VECountConsolidatorCli -- CLI frontend that uses the library above.
+To run the tests, use the following command:
 
-### VECountConsolidator
-This library is available from [NuGet](https://www.nuget.org/packages/VECountConsolidator/).
+```
+dotnet test
+```
 
-Library handling the process. Caller should call Process() function with appropriate `enum` currently only supports `VEC.ARRL`.
+## Supported VEC
+- [ARRL](http://www.arrl.org/) (currently only ARRL is supported)
 
-Return the list of the following format.
+Support for other VECs can be added by implementing the `Consolidator.ICountGetter` interface and updating the `Consolidator` class. See below for details.
+
+## How to Add Support for Other VECs
+
+1. **Create a New Class**
+   - Add a new class file (e.g., `XYZVEC.cs`) in the `VECountConsolidator` directory.
+
+2. **Implement the Interface**
+   - Implement the `Consolidator.ICountGetter` interface:
+     - `string Vec { get; }` property (VEC name)
+     - `IEnumerable<Person> Extract()` method (returns a list of Person objects)
+
+3. **Implement Data Extraction**
+   - In `Extract()`, write logic to retrieve and parse VE data for your VEC. Use `Utils.GetWeb()` for web requests if needed.
+
+4. **Register Your VEC**
+   - Add your VEC to the `VEC` enum in `Consolidator.cs`.
+   - Update the `Process()` method in `Consolidator.cs` to instantiate your new class when your VEC is selected.
+
+5. **Example Skeleton**
+   ```csharp
+   internal class XYZVEC : Consolidator.ICountGetter
+   {
+       public string Vec => "XYZVEC";
+       public IEnumerable<Consolidator.Person> Extract()
+       {
+           // Implement data extraction and parsing logic here
+           // Return a list of Person objects
+       }
+   }
+   ```
+
+6. **Update Documentation and Tests**
+   - Document your new VEC in the README and code comments.
+   - Add or update tests to verify correct data extraction.
+
+## VECountConsolidator Library
+- NuGet: [VECountConsolidator](https://www.nuget.org/packages/VECountConsolidator/)
+- Supported .NET: .NET 5.0, .NET Core 3.0
+
+### Basic Usage
+Call the `Process()` method with `VEC.ARRL` as an argument.
+
+The return value is a list of the following type:
 
     public class Person
     {
@@ -33,19 +82,17 @@ Return the list of the following format.
         public string StateName;
     }
 
-### VECountConsolidatorCli
+## VECountConsolidatorCli (Command Line Tool)
 
-Command line arguments for VECountConsolidatorCli is below:
+### Usage
+```
+dotnet run --project VECountConsolidatorCli [options]
+```
 
-    VECountConsolidatorCli 1.5.0.0
-    Copyright (c) 2018 Hideki Saito
-    ERROR(S):
-    Required option 'm, mode' is missing.
+## Build Instructions
+```
+dotnet build VE_Count_Consolidator.sln
+```
 
-      -m, --mode    Required. Mode of operations. (Currently supported: create)
-
-      --help        Display this help screen.
-
-      --version     Display version information.
-
-
+## License
+This project is licensed under the MIT License.

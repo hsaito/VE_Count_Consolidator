@@ -1,0 +1,1 @@
+- Copilot should use English language for all responses.
