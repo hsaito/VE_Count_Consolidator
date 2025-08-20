@@ -12,6 +12,12 @@ namespace VECountConsolidator
         private readonly List<Consolidator.State> _states = new List<Consolidator.State>();
         private string _baseUrl;
         public string Vec => "ARRL";
+        private readonly Func<string, string> _webProvider;
+
+        public ARRL(Func<string, string> webProvider = null)
+        {
+            _webProvider = webProvider ?? (url => Utils.GetWeb(url).Result);
+        }
 
         /// <summary>
         ///     Extract the list of VE from the ARRL list
@@ -25,7 +31,7 @@ namespace VECountConsolidator
             foreach (var state in _states)
             {
                 var target = string.Format(_baseUrl, state.StateCode);
-                var web = Utils.GetWeb(target).Result;
+                var web = _webProvider(target);
                 web = ExtractTable(web);
 
                 list.AddRange(GetNameElement(web, state));

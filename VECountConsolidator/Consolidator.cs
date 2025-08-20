@@ -51,6 +51,16 @@ namespace VECountConsolidator
         }
 
         /// <summary>
+        ///     Process extractions (for testing, allows injection of custom getters)
+        /// </summary>
+        /// <param name="countGetterList">List of custom ICountGetter</param>
+        /// <returns>List of VEs</returns>
+        public static IEnumerable<Person> Process(IEnumerable<ICountGetter> countGetterList)
+        {
+            return ProcessList(countGetterList);
+        }
+
+        /// <summary>
         ///     Extract from each of VEC
         /// </summary>
         /// <param name="list">List of class for getting counts</param>
@@ -64,7 +74,7 @@ namespace VECountConsolidator
         }
 
 
-        internal interface ICountGetter
+        public interface ICountGetter
         {
             string Vec { get; }
             IEnumerable<Person> Extract();
